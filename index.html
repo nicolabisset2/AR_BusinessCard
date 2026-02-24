@@ -2,38 +2,69 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="style.css">
 
 
 <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script> 
 <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.1/dist/mindar-image-aframe.prod.js"></script>
 
-<script> const show = () => { document.querySelector("#video").play(); }
+<script> const show = () => { document.querySelector("#video").play(); } </script>
 
-AFRAME.registerComponent('mytarget', {
+<script> 
+      //AFRAME.registerComponent('mytarget', {
+       // init: function () {
+          // Select the video element from the assets
+         // const video = document.querySelector("#video");
+
+          //this.el.addEventListener('targetFound', event => {
+            //console.log("Target found: Starting video");
+            //video.play(); // Play only when detected
+         // });
+
+          //this.el.addEventListener('targetLost', event => {
+            //console.log("Target lost: Pausing video");
+           // video.pause(); // Optional: stop when card is hidden
+        //  });
+      //  }
+    //  });
+
+
+      AFRAME.registerComponent('click-link', {
+    schema: {url: {type: 'string'}},
     init: function () {
-      this.el.addEventListener('targetFound', event => {
-        console.log("target found");
-        show();
-      });
-      this.el.addEventListener('targetLost', event => {
-        console.log("target found");
+      this.el.addEventListener('click', () => {
+        window.open(this.data.url, '_blank');
       });
     }
   });
-</script>
+
+    </script>
 <body>
 
-<a-scene mindar-image="imageTargetSrc: ./targets.mind; showStats: false; uiScanning: #example-scanning-overlay;" embedded color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
+<a-scene mindar-image="imageTargetSrc: ./targets3.mind; showStats: false; uiScanning: #example-scanning-overlay;" embedded color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
   <a-assets>
   
-  <video id="video" autoplay="true" loop="true" src="./2025_Showreel_ Short Ver_HD.mp4"></video>
+
+  <a-asset-item id="my-model" src="./260112_Logo3D_v11_Fixed.glb"></a-asset-item>
+
 </a-assets>
 
-<a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+<a-camera position="0 0 0" look-controls="enabled: false" cursor="fuse: false; rayOrigin: mouse;" raycaster="far: 10000; objects: .clickable"></a-camera>
 
   <a-entity id="mytarget" mytarget mindar-image-target="targetIndex: 0">
-      <a-video src="#video" position="0 0 0" rotation="0 0 0" width="1.0" height="0.6"></a-video>
+
+
+      <a-gltf-model src="#my-model" 
+                  position="0 0 0" 
+                  rotation="70 0 0" 
+                  scale="4 4 4"
+                  class="clickable"
+                  click-link="url: https://www.nowheremedia.net/"
+                  animation__float="property: position; to: 0 0.1 0.1; dur: 5000; easing: easeInOutQuad">
+    </a-gltf-model>
+
   </a-entity>
+
 </a-scene>
 
 </body>
