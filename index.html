@@ -2,7 +2,6 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="style.css">
 
 
 <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script> 
@@ -11,23 +10,6 @@
 <script> const show = () => { document.querySelector("#video").play(); } </script>
 
 <script> 
-      //AFRAME.registerComponent('mytarget', {
-       // init: function () {
-          // Select the video element from the assets
-         // const video = document.querySelector("#video");
-
-          //this.el.addEventListener('targetFound', event => {
-            //console.log("Target found: Starting video");
-            //video.play(); // Play only when detected
-         // });
-
-          //this.el.addEventListener('targetLost', event => {
-            //console.log("Target lost: Pausing video");
-           // video.pause(); // Optional: stop when card is hidden
-        //  });
-      //  }
-    //  });
-
 
       AFRAME.registerComponent('click-link', {
     schema: {url: {type: 'string'}},
@@ -41,11 +23,16 @@
     </script>
 <body>
 
-<a-scene mindar-image="imageTargetSrc: ./targets2.mind; showStats: false; uiScanning: #example-scanning-overlay;" embedded color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
+<a-scene mindar-image="imageTargetSrc: ./targets4.mind; showStats: false; uiScanning: #example-scanning-overlay;" embedded color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
   <a-assets>
   
 
-  <a-asset-item id="my-model" src="./260112_Logo3D_v11_Fixed.glb"></a-asset-item>
+  <a-asset-item id="my-model" src="./3D/260112_Logo3D_v11_Fixed.glb"></a-asset-item>
+
+  <img id="icon-web" src="./2D-imgs/NHM-icon.png">
+  <img id="icon-insta" src="./2D-imgs/Insta-icon@2x-8.png">
+  <img id="icon-linkedin" src="./2D-imgs/Linkedin-icon@2x-8.png">
+  <img id="icon-bluesky" src="./2D-imgs/Bluesky-icon@2x-8.png">
 
 </a-assets>
 
@@ -63,8 +50,27 @@
                   animation__float="property: position; to: 0 0.1 0.1; dur: 5000; easing: easeInOutQuad">
     </a-gltf-model>
 
-  </a-entity>
+    <a-entity id="button-group" position="0 -0.6 0.1">
+    
+    <a-image src="#icon-web" class="clickable" click-link="url: https://www.nowheremedia.net/"
+             position="-0.35 0 0" width="0.15" height="0.15" >
+    </a-image>
 
+    <a-image src="#icon-insta" class="clickable" click-link="url: https://www.instagram.com/nowhere.media"
+             position="0.05 0 0" width="0.15" height="0.15">
+    </a-image>
+
+    <a-image src="#icon-linkedin" class="clickable" click-link="url: https://www.linkedin.com/company/nowheremedia/?viewAsMember=true"
+             position="0.25 0 0" width="0.15" height="0.15">
+    </a-image>
+
+    <a-image src="#icon-bluesky" class="clickable" click-link="url: https://bsky.app/profile/nowheremedia.bsky.social"
+             position="0.45 0 0" width="0.15" height="0.15">
+    </a-image>
+
+    </a-entity>
+
+</a-entity>
 </a-scene>
 
 </body>
