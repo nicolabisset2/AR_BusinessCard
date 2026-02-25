@@ -1,3 +1,4 @@
+
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -6,7 +7,6 @@
 <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script> 
 <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.1/dist/mindar-image-aframe.prod.js"></script>
 
-<script> const show = () => { document.querySelector("#video").play(); } </script>
 
 <script> 
 
@@ -19,55 +19,91 @@
     }
   });
 
+AFRAME.registerComponent('snap-rotate', {
+  init: function() {
+    this.startX = 0;
+    this.currentSide = 0;
+
+    const handleStart = (clientX) => {
+      this.startX = clientX;
+    };
+
+    const handleEnd = (clientX) => {
+      const diffX = clientX - this.startX;
+      if (Math.abs(diffX) > 50) {
+        if (diffX > 0) {
+          this.currentSide--; // Swipe/Drag Right
+        } else {
+          this.currentSide++; // Swipe/Drag Left
+        }
+
+        const targetAngle = this.currentSide * 90;
+        this.el.setAttribute('animation__snap', {
+          property: 'rotation',
+          to: `0 ${targetAngle} 0`,
+          dur: 1000,
+          easing: 'easeInOutSine'
+        });
+      }
+    };
+
+    // Mobile Listeners
+    window.addEventListener('touchstart', (e) => handleStart(e.touches[0].clientX));
+    window.addEventListener('touchend', (e) => handleEnd(e.changedTouches[0].clientX));
+
+    // PC/Mouse Listeners
+    window.addEventListener('mousedown', (e) => handleStart(e.clientX));
+    window.addEventListener('mouseup', (e) => handleEnd(e.clientX));
+  }
+});
+
     </script>
 <body>
 
 <a-scene mindar-image="imageTargetSrc: ./targets4.mind; showStats: false; uiScanning: #example-scanning-overlay;" embedded color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
   <a-assets>
   
+  <a-asset-item id="my-model" src="./3D/260112_Logo3D_v11_Fixed.glb"></a-asset-item>
 
-  <a-asset-item id="my-model" src="./260112_Logo3D_v11_Fixed.glb"></a-asset-item>
-
-  <img id="icon-web" src="./NHM-icon.png">
-  <img id="icon-insta" src="./Insta-icon@2x-8.png">
-  <img id="icon-linkedin" src="./Linkedin-icon@2x-8.png">
-  <img id="icon-bluesky" src="./Bluesky-icon@2x-8.png">
+  <img id="icon-web" src="./2D-imgs/NHM-icon.png">
+  <img id="icon-insta" src="./2D-imgs/Insta-icon@2x-8.png">
+  <img id="icon-linkedin" src="./2D-imgs/Linkedin-icon@2x-8.png">
+  <img id="icon-bluesky" src="./2D-imgs/Bluesky-icon@2x-8.png">
 
 </a-assets>
 
 <a-camera position="0 0 0" look-controls="enabled: false" cursor="fuse: false; rayOrigin: mouse;" raycaster="far: 10000; objects: .clickable"></a-camera>
 
-  <a-entity id="mytarget" mytarget mindar-image-target="targetIndex: 0">
+  <a-entity id="mytarget" mytarget mindar-image-target="targetIndex: 0" rotation="0 0 0">
 
-
-      <a-gltf-model src="#my-model" 
+    <a-entity id="rotation-wrapper" rotation="90 0 0" position="0 0 0">
+         <a-gltf-model src="#my-model" 
                   position="0 0 0" 
-                  rotation="70 0 0" 
+                  rotation="0 0 0" 
                   scale="4 4 4"
-                  class="clickable"
-                  click-link="url: https://www.nowheremedia.net/"
-                  animation__float="property: position; to: 0 0.1 0.1; dur: 5000; easing: easeInOutQuad">
-    </a-gltf-model>
+                  snap-rotate>
+        </a-gltf-model>
+    </a-entity>
 
-    <a-entity id="button-group" position="0 -0.6 0.1">
+<a-entity id="button-group" position="0 -0.6 0.1">
     
     <a-image src="#icon-web" class="clickable" click-link="url: https://www.nowheremedia.net/"
-             position="-0.35 0 0" width="0.15" height="0.15" >
+             position="-0.375 0 0" width="0.2" height="0.2">
     </a-image>
 
     <a-image src="#icon-insta" class="clickable" click-link="url: https://www.instagram.com/nowhere.media"
-             position="0.05 0 0" width="0.15" height="0.15">
+             position="-0.125 0 0" width="0.2" height="0.2">
     </a-image>
 
     <a-image src="#icon-linkedin" class="clickable" click-link="url: https://www.linkedin.com/company/nowheremedia/?viewAsMember=true"
-             position="0.25 0 0" width="0.15" height="0.15">
+             position="0.125 0 0" width="0.2" height="0.2">
     </a-image>
 
     <a-image src="#icon-bluesky" class="clickable" click-link="url: https://bsky.app/profile/nowheremedia.bsky.social"
-             position="0.45 0 0" width="0.15" height="0.15">
+             position="0.375 0 0" width="0.2" height="0.2">
     </a-image>
 
-    </a-entity>
+</a-entity>
 
 </a-entity>
 </a-scene>
