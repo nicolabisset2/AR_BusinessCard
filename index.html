@@ -32,9 +32,9 @@ AFRAME.registerComponent('snap-rotate', {
       const diffX = clientX - this.startX;
       if (Math.abs(diffX) > 50) {
         if (diffX > 0) {
-          this.currentSide--; // Swipe/Drag Right
-        } else {
           this.currentSide++; // Swipe/Drag Left
+        } else {
+          this.currentSide--; // Swipe/Drag Right
         }
 
         const targetAngle = this.currentSide * 90;
